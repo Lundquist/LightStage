@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, Suspense, lazy } from "react";
+import { useDispatch } from "react-redux";
+import { fetchProjects } from "store/projects";
+import "./styles/App.scss";
+
+const Header = lazy(() => import("./components/Header"));
+const Footer = lazy(() => import("./components/Footer"));
+const ContentContainer = lazy(() => import("./screens/ContentContainer"));
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Suspense fallback={<div>Loading</div>}>
+        <Header />
+        <ContentContainer />
+        <Footer />
+      </Suspense>
     </div>
   );
 }
